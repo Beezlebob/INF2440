@@ -4,30 +4,26 @@ import java.util.Random;
 
 public class ArrayHandler {
 
-	public int[] fillArrayRandom(int[] testArray,int randomInt) {
+	public int[] fillArrayRandom(int[] array,int randomInt) {
 		Random r = new Random(7361);
-		for(int i: testArray){
-			testArray[i] = newElement(r,randomInt);
+		for(int i = 0;i<array.length;i++){
+			array[i] = newElement(r,randomInt);
 		}
-		return testArray;
+		return array;
 	}
 
 	public int[] sortArray(int[] array) {
-		int max = 0;
-		int position = 0;
-		int[] sorted = new int[40];
-		for(int i=0;i<sorted.length;i++){
-			for(int j=0;j<array.length;j++){
-				if(array[j]>max){
-					max = array[j];
-					position = j;
-				}
+		int i,t;
+		for(int k = 0;k<array.length-1;k++){
+			t = array[k+1];
+			i = k;
+			while(i>=0 && array[i]<t){
+				array[i+1]=array[i];
+				i--;
 			}
-			sorted[i] = max;
-			array[position] = -1;
-			max = 0;
+			array[i+1] = t;
 		}
-		return sorted;
+		return array;
 	}
 
 	public int newElement(Random r,int range) {

@@ -89,7 +89,7 @@ public class Part1TestSequential extends TestCase {
 		SequentialSolution seq = new SequentialSolution(1000);
 		int[] testArray = seq.getFortyHightest();
 		seq.execute();
-		assertNotSame(testArray,seq.getFortyHightest());
+		assertNotSame(testArray[39],seq.getFortyHightest()[39]);
 	}
 	
 	public static void main(String[] args) {
