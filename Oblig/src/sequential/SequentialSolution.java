@@ -1,31 +1,42 @@
 package sequential;
 
+import java.util.Arrays;
+
+import arrayHandling.ArrayHandler;
+
+import printing.FormatedPrint;
+
 public class SequentialSolution {
 	ArrayHandler handler;
 	int[] fortyHightestScores;
 	int range;
+	FormatedPrint fp;
+	public double timeUsed2A;
+	public double timeUsedArraysSort;
 	
 	public SequentialSolution(int range) {
+		fp = new FormatedPrint();
 		handler = new ArrayHandler();
 		fortyHightestScores = new int[40];
-		fortyHightestScores = handler.fillArrayRandom(fortyHightestScores, range);
 		this.range = range;
 	}
 	
-	public int[] getFortyHightest(){
+	public int[] getFortyHighest(){
 		return fortyHightestScores;
 	}
 	public void execute(){
+		int[] sortTestArray = new int[range];
 		int[] restResults = new int[range-40];
-		long t1 = System.nanoTime();
-		fortyHightestScores = handler.sortArray(getFortyHightest());
-		double timeTakenSort = (System.nanoTime()-t1/1000000.0);
+		fortyHightestScores = handler.fillArrayRandom(fortyHightestScores, range);
 		restResults = handler.fillArrayRandom(restResults, range);
+		sortTestArray = handler.fillArrayRandom(sortTestArray, range);
 		long t2 = System.nanoTime();
-		fortyHightestScores = handler.appendArrays(getFortyHightest(),restResults);
-		double timeTakenSortAll = (System.nanoTime()-t2/1000000.0);
-		System.out.println("Time taken sorting 40 biggest is: "+timeTakenSort+" ms");
-		System.out.println("Time taken sorting all is: "+timeTakenSortAll+" ms");
+		Arrays.sort(sortTestArray);
+		timeUsedArraysSort = ((System.nanoTime()-t2)/1000000.0);
+		long t1 = System.nanoTime();
+		fortyHightestScores = handler.sortArray(getFortyHighest());
+		fortyHightestScores = handler.appendArrays(getFortyHighest(),restResults);
+		timeUsed2A = ((System.nanoTime()-t1)/1000000.0);
 	}
 	
 }

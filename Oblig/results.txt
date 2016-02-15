@@ -1,0 +1,10 @@
+-----------------------------------------
+Machine has 4 processor kernals
+Processor: Intel(R) Core(TM) i5-4200U
+Speed is: 1,6 GHz
+Running with range: 1000000
+Time taken own A2 seq:      1.179663 ms
+Time taken Arrays.sort:    92.946521 ms
+Time taken parallell:       3.432436 ms
+With 8 threads
+-----------------------------------------

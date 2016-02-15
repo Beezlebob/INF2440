@@ -1,29 +1,39 @@
-package sequential;
+package arrayHandling;
 
 import java.util.Random;
 
 public class ArrayHandler {
-
-	public int[] fillArrayRandom(int[] array,int randomInt) {
-		Random r = new Random(7361);
+	
+	Random r;
+	
+	public ArrayHandler(){
+		r = new Random(7361);
+	}
+		
+	public int[] fillArrayRandom(int[] array,int range) {
 		for(int i = 0;i<array.length;i++){
-			array[i] = newElement(r,randomInt);
+			array[i] = newElement(r,range);
 		}
 		return array;
 	}
 
 	public int[] sortArray(int[] array) {
-		int i,t;
-		for(int k = 0;k<array.length-1;k++){
-			t = array[k+1];
-			i = k;
-			while(i>=0 && array[i]<t){
-				array[i+1]=array[i];
-				i--;
+		int[] sorted = new int[40];
+		int position = 0;
+		int max = 0;
+		for(int j=0;j<sorted.length;j++){
+			for(int i=0;i<array.length;i++){
+				if(array[i]>max){
+					max = array[i];
+					position = i;
+				}
 			}
-			array[i+1] = t;
+			sorted[j] = max;
+			//System.out.println(sorted[j]);
+			array[position] = -1;
+			max = 0;
 		}
-		return array;
+		return sorted;
 	}
 
 	public int newElement(Random r,int range) {
