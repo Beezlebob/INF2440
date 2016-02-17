@@ -11,7 +11,7 @@ public class Oblig1 {
 		if(args.length == 0){
 			range = 1000;
 			numbThreads = 4;
-			System.out.println("For custom range and number of threads run with arguments: Oblig1 -range -numberOfThreads");
+			System.out.println("For custom range and number of threads run with arguments: Oblig1 -range -numberOfThreads. Now running with range 1000 and 4 threads");
 		}else{
 			range = Integer.parseInt(args[0]);
 			numbThreads = Integer.parseInt(args[1]);

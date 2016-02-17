@@ -22,13 +22,13 @@ public class ThreadMonitor {
 	public void execute(){
 		fortyFirst = handler.fillArrayRandom(getFortyHighest(), range);
 		fortyFirst = handler.sortArray(getFortyHighest());
-		int[][] restArrays = new int[numThreads][range/numThreads];
+		int[][] restArrays = new int[numThreads][(range/numThreads)-40];
 		for(int i=0;i<restArrays.length;i++){
 			restArrays[i] = handler.fillArrayRandom(restArrays[i], range);
 		}
 		long t = System.nanoTime();
 		for(int i =0;i<numThreads;i++){
-			new Thread(new ParallelThread(getFortyHighest(),restArrays[i])).start();
+			new Thread(new ParallelThread(restArrays[i])).start();
 		}
 		try{barrier.await();
 		}catch(Exception e){return;}
@@ -39,20 +39,22 @@ public class ThreadMonitor {
 	}
 	//Thread class
 	class ParallelThread implements Runnable {
-	
-		int[] fortyFirstThread;
 		int[] restArray;
-		ArrayHandler threadArrayHandler;
+	//	ArrayHandler threadArrayHandler;
 		
-		public ParallelThread(int[] fortyFirst,int[] restArray) {
-			this.fortyFirstThread = fortyFirst.clone();
+		public ParallelThread(int[] restArray) {
 			this.restArray = restArray.clone();
-			threadArrayHandler = new ArrayHandler();
+			//threadArrayHandler = new ArrayHandler();
 		}
 		
 		@Override
 		public void run() {
-			fortyFirstThread = threadArrayHandler.appendArrays(fortyFirstThread, restArray);
+		
+			for(int i=0;i<restArray.length;i++){
+				if(fortyFirst[39]<restArray[i]){
+					fortyFirst = handler.putValue(fortyFirst, restArray[i]);
+				}
+			}
 			try{
 				barrier.await();
 			}catch(Exception e){

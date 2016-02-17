@@ -43,10 +43,14 @@ public class ArrayHandler {
 	public int[] appendArrays(int[]fortyLargest,int[]restRange) {
 		for(int i=0;i<restRange.length;i++){
 			if(fortyLargest[39]<restRange[i]){
-				fortyLargest[39] = restRange[i];
-				fortyLargest = sortArray(fortyLargest);
+				fortyLargest = putValue(fortyLargest, restRange[i]);
 			}
 		}
+		return fortyLargest;
+	}
+	public int[] putValue(int[]fortyLargest, int number){
+		fortyLargest[39] = number;
+		fortyLargest = sortArray(fortyLargest);
 		return fortyLargest;
 	}
 

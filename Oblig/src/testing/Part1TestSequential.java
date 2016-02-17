@@ -1,12 +1,9 @@
 package testing;
 
-import java.util.Arrays;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import arrayHandling.ArrayHandler;
 
 import sequential.*;
 
@@ -51,22 +48,6 @@ public class Part1TestSequential extends TestCase {
 		int[] testArray = seq.getFortyHighest();
 		seq.execute();
 		assertNotSame(testArray[39],seq.getFortyHighest()[39]);
-	}
-//	 @Test with array.sort()
-	public void testArraySortGeneric(){
-		ArrayHandler handler = new ArrayHandler();
-		int range = 1000;
-		int[] testArrayA = new int[40];
-		int[] testArrayB = new int[40];
-		testArrayA = handler.fillArrayRandom(testArrayA, range);
-		for(int i=0;i<testArrayA.length;i++){
-			testArrayB[i] = testArrayA[i];
-		}
-		testArrayA = handler.sortArray(testArrayA);
-		Arrays.sort(testArrayB);
-		assertTrue(testArrayA[0]==testArrayB[39]);
-		assertTrue(testArrayA[39]==testArrayB[0]);
-		
 	}
 	
 	public static void main(String[] args) {

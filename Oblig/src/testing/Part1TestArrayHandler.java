@@ -1,5 +1,6 @@
 package testing;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -70,11 +71,42 @@ public class Part1TestArrayHandler extends TestCase{
 		testArrayA = handler.fillArrayRandom(testArrayA, range);
 		testArrayA = handler.sortArray(testArrayA);
 		testArrayB = handler.fillArrayRandom(testArrayB, range);
-		int[] original = testArrayA;
+		int[] original = testArrayA.clone();
 		testArrayA = handler.appendArrays(testArrayA, testArrayB);
 		assertNotSame(original[39],testArrayA[39]);
+		assertNotSame(original[39],-1);
 	}
-	
+//	 @Test putValue()
+	public void testPutValue(){
+		ArrayHandler handler = new ArrayHandler();
+		int range = 1000;
+		int[] testArrayA = new int[40];
+		testArrayA = handler.fillArrayRandom(testArrayA, range);
+		testArrayA = handler.sortArray(testArrayA);
+		int lowestValue = testArrayA[39]+1;
+		testArrayA = handler.putValue(testArrayA, lowestValue);
+		assertTrue(testArrayA[39]==lowestValue);
+	}
+//	 @Test with array.sort()
+	public void testArraySortGeneric(){
+		ArrayHandler handler = new ArrayHandler();
+		int range = 1000;
+		int[] testArrayA = new int[40];
+		int[] testArrayB = new int[40];
+		testArrayA = handler.fillArrayRandom(testArrayA, range);
+		for(int i=0;i<testArrayA.length;i++){
+			testArrayB[i] = testArrayA[i];
+		}
+		testArrayA = handler.sortArray(testArrayA);
+		Arrays.sort(testArrayB);
+		int j = testArrayA.length-1;
+		for(int i = 0;i<testArrayA.length;i++){
+			assertTrue(testArrayA[i]==testArrayB[j]);
+			assertFalse(testArrayA[i]==-1);
+			j--;
+		}
+		
+	}
 	public static void main(String[] args) {
 		Part1TestArrayHandler test = new Part1TestArrayHandler();
 		test.createLogger();
