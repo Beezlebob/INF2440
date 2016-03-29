@@ -32,8 +32,8 @@ public class FormatedPrint {
 			int kernals = Runtime.getRuntime().availableProcessors(); 
 			printer.println("-----------------------------------------");
 			printer.println("Machine has "+kernals+" processor kernals");
-			printer.println("Processor: Intel(R) Core(TM) i5-4200U");
-			printer.println("Speed is: 1,6 GHz");
+			printer.println("Processor: Intel(R) Core(TM) i5-2400");
+			printer.println("Speed is: 3,4 GHz");
 			printer.println("Running with range: "+range);
 			printer.format("Time taken own A2 seq:  %12.6f ms",seqA2[4]);
 			printer.println();

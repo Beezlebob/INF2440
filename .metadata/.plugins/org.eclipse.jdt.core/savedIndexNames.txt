@@ -1,0 +1,19 @@
+INDEX VERSION 1.127+C:\Users\Admin\Documents\Programmering\INF2440\INF2440\.metadata\.plugins\org.eclipse.jdt.core
+305854171.index
+3065916431.index
+4108727661.index
+1115467115.index
+163172794.index
+2804322158.index
+2508033595.index
+1299022128.index
+1995173708.index
+1498219845.index
+573543369.index
+4155206848.index
+30765161.index
+4041092966.index
+1697886153.index
+3974580528.index
+3133528496.index
+2960708829.index

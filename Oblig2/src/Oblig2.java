@@ -5,12 +5,20 @@ public class Oblig2 {
 	static EratosthenesSil es;
 	
 	public static void main(String[] args) {
-		//final long doubleOfMaxNum = Long.parseLong(args[0])*Long.parseLong(args[0])-1;
+		final long doubleOfMaxNum = Long.parseLong(args[0])*Long.parseLong(args[0])-1;
 		es = new EratosthenesSil(Integer.parseInt(args[0]));
 		es.generatePrimesByEratosthenes();
-		//runFactorization(doubleOfMaxNum);*/
-		ThreadMonitor tm = new ThreadMonitor(4,Integer.parseInt(args[0]));
+		runFactorization(doubleOfMaxNum);
+		ThreadMonitor tm = new ThreadMonitor(8,Integer.parseInt(args[0]));
 		tm.generatePrimes();
+		long t3 = System.nanoTime();//starting the clock
+		ArrayList<ArrayList<Long>> threadFactors = tm.factorize(doubleOfMaxNum);
+		double timeUsedFacPar = (System.nanoTime()-t3)/1000000.0; //Stopping clock
+		System.out.println(timeUsedFacPar);
+		for(int i=0;i<threadFactors.size()-1;i++){
+			System.out.print(doubleOfMaxNum-i+" = ");
+			printFactors(threadFactors.get(i));
+		}
 		
 	}
 	static void runFactorization(long num){
@@ -52,5 +60,6 @@ public class Oblig2 {
 			System.out.print("*");
 			System.out.print(factors.get(i));
 		}
+		System.out.println();
 	}
 }

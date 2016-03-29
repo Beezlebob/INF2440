@@ -1,10 +1,10 @@
 -----------------------------------------
 Machine has 4 processor kernals
-Processor: Intel(R) Core(TM) i5-4200U
-Speed is: 1,6 GHz
+Processor: Intel(R) Core(TM) i5-2400
+Speed is: 3,4 GHz
 Running with range: 10000000
-Time taken own A2 seq:      7.666657 ms
-Time taken Arrays.sort:  1086.967935 ms
-Time taken parallell:     371.584623 ms
-With 2 threads
+Time taken own A2 seq:     11.368725 ms
+Time taken Arrays.sort:   983.974028 ms
+Time taken parallell:     411.781089 ms
+With 12 threads
 -----------------------------------------
