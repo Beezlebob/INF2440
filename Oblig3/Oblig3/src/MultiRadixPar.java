@@ -1,6 +1,8 @@
 import java.util.Random;
 import java.util.concurrent.CyclicBarrier;
 
+import javax.naming.BinaryRefAddr;
+
 
 public class MultiRadixPar {
 
@@ -8,6 +10,10 @@ public class MultiRadixPar {
 	int [] a;
 	int max;
 	int index = 1;
+	int[] bit;
+	int bitIndex = 0;
+	int mask;
+	int allCount[];
 	static int numThreads;
 	CyclicBarrier cb;
 	final static int NUM_BIT =7; // alle tall 6-11 OK
@@ -37,7 +43,6 @@ public class MultiRadixPar {
 		max = a[0];
 		//Starting with a)
 		int numBit = 2, numDigits;
-		int[] bit;
 		n  = a.length;
 		cb = new CyclicBarrier(numThreads+1);
 		System.out.println("Starting threads");
@@ -58,9 +63,15 @@ public class MultiRadixPar {
 				bit[i] = numBit/numDigits;
 				if ( rest-- > 0)  bit[i]++;
 			}
-			
+			System.out.println("bit.length = "+bit.length);
 			int[] t=a, b = new int [n];
+			allCount = new int[10];
 			System.out.println("numBit = "+numBit);
+			System.out.println("Starting Threads again - resetting index");
+			index = 0;
+			cb.await();
+			System.out.println(allCount.length);
+			
 			cb.await();
 		}catch(Exception e){
 			System.err.println(e);
@@ -86,10 +97,20 @@ public class MultiRadixPar {
 			max = i;
 		}
 	}
+	synchronized void addToAllCount(int count[]){
+		for(int i=0;i<count.length;i++){
+			allCount[i] += count[i];
+		}
+	}
+	int getBit() {
+		mask = (1<<bit[bitIndex]) -1;
+		return bit[bitIndex];
+	}
 	
 	class RadixThread implements Runnable{
 
 		int number = 0;
+		int count[];
 		
 		@Override
 		public void run() {
@@ -103,18 +124,22 @@ public class MultiRadixPar {
 			}
 			try{
 				cb.await();
-			}catch(Exception e){
-				System.err.println(e);
-			}
-			System.out.println(this.toString()+" is finished, going to sleep");
-			try {
+				System.out.println(this.toString()+" is finished, going to sleep");
 				cb.await();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.out.println(this.toString()+" is done waiting");
+				number = getNext();
+				while(number!=-1){
+					System.out.println(this.toString()+" has number "+number);
+					number = getNext();
+					int shift = getBit();
+					count[(number>>>shift)& mask]++; // fix set shift and mask
+				}
+				addToAllCount(count);
+				cb.await();
+				System.out.println(this.toString()+" is done");
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
-			System.out.println("wait is done");
-			System.out.println("going to do sort");
 		}
 	}
 }

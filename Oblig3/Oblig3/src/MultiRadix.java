@@ -49,8 +49,9 @@ class MultiRadix{
 		  }
 
 		  int[] t=a, b = new int [n];
-
+		  System.out.println(bit.length);	
 		  for (int i =0; i < bit.length; i++) {
+			  System.out.println("bit["+i+"]"+bit[i]);
 			  radixSort( a,b,bit[i],sum );    // i-te siffer fra a[] til b[]
 			  sum += bit[i];
 			  // swap arrays (pointers only)
