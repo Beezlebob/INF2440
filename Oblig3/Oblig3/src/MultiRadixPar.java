@@ -63,14 +63,12 @@ public class MultiRadixPar {
 				bit[i] = numBit/numDigits;
 				if ( rest-- > 0)  bit[i]++;
 			}
-			System.out.println("bit.length = "+bit.length);
 			int[] t=a, b = new int [n];
-			allCount = new int[10];
-			System.out.println("numBit = "+numBit);
 			System.out.println("Starting Threads again - resetting index");
 			index = 0;
+			getBit();
+			allCount = new int[mask+1];
 			cb.await();
-			System.out.println(allCount.length);
 			
 			cb.await();
 		}catch(Exception e){
@@ -107,6 +105,11 @@ public class MultiRadixPar {
 		return bit[bitIndex];
 	}
 	
+	//endre for lengre tall senere
+	int setShift(){
+		return 0;
+	}
+	
 	class RadixThread implements Runnable{
 
 		int number = 0;
@@ -118,7 +121,6 @@ public class MultiRadixPar {
 			while(number!=-1){
 				number = getNext();
 				if(biggerThanMax(number)){
-					//System.out.println(this.toString()+" is setting max, newMax="+number);
 					setMax(number);
 				}
 			}
@@ -126,14 +128,18 @@ public class MultiRadixPar {
 				cb.await();
 				System.out.println(this.toString()+" is finished, going to sleep");
 				cb.await();
-				System.out.println(this.toString()+" is done waiting");
+				System.out.println(this.toString()+" is starting sort");
+				//b)
 				number = getNext();
+				count = new int[mask+1];
+				int shift = setShift();
 				while(number!=-1){
-					System.out.println(this.toString()+" has number "+number);
 					number = getNext();
-					int shift = getBit();
-					count[(number>>>shift)& mask]++; // fix set shift and mask
+					if(number != -1){
+						count[(number>>> shift) & mask]++; 
+					}
 				}
+				System.out.println(this.toString()+" is done with counting numbers - trying addToCount");
 				addToAllCount(count);
 				cb.await();
 				System.out.println(this.toString()+" is done");

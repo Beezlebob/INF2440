@@ -76,12 +76,15 @@ class MultiRadix{
 		  int  acumVal = 0, j, n = a.length;
 		  int mask = (1<<maskLen) -1;
 		  int [] count = new int [mask+1];
+		  System.out.println("mask = "+mask);
+		  System.out.println("count.length = "+count.length);
 
 		 // b) count=the frequency of each radix value in a
 		  for (int i = 0; i < n; i++) {
 			 count[(a[i]>>> shift) & mask]++;
 		  }
-
+		  
+		  
 		 // c) Add up in 'count' - accumulated values
 		  for (int i = 0; i <= mask; i++) {
 			   j = count[i];
