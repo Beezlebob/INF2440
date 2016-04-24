@@ -91,7 +91,7 @@ class MultiRadix{
 				count[i] = acumVal;
 				acumVal += j;
 		   }
-		 // d) move numbers in sorted order a to b
+		  // d) move numbers in sorted order a to b
 		  for (int i = 0; i < n; i++) {
 			 b[count[(a[i]>>>shift) & mask]++] = a[i];
 		  }
