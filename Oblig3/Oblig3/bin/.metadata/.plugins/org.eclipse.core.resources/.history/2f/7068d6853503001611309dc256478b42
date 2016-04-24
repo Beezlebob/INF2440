@@ -1,0 +1,31 @@
+import java.util.Random;
+
+
+public class MultiRadixPar {
+
+	/**
+	 * @param args
+	 */
+	int n;
+	int [] a;
+	final static int NUM_BIT =7; // alle tall 6-11 OK
+
+	public static void main(String [] args) {
+		if (args.length != 1) {
+	     	System.out.println(" bruk : >java SekvensiellRadix <n> ");
+		} else {
+			int n = Integer.parseInt(args[0]);
+			new MultiRadix().doIt(n);
+		}
+	} // end main
+
+	void doIt (int len) {
+		a = new int[len];
+		Random r = new Random(123);
+		for (int i =0; i < len;i++) {
+		   a[i] = r.nextInt(len);
+	    }
+	    a = radixMulti(a);
+	} // end doIt
+	
+}
