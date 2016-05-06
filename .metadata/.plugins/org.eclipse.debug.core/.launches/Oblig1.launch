@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/Oblig/src/Oblig1.java"/>
+<listEntry value="/Oblig3/Oblig3/src/MultiRadixPar.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="Oblig1"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="10000000 12"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Oblig"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="MultiRadixPar"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="2000 4"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Oblig3"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms512M -Xmx1524M"/>
 </launchConfiguration>

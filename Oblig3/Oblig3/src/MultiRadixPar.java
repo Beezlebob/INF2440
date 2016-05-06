@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CyclicBarrier;
 
@@ -6,20 +7,17 @@ import javax.naming.BinaryRefAddr;
 
 public class MultiRadixPar {
 
-	int n;
-	int [] a,b;
-	int max;
+	int n, max, mask, acumVal;
+	int [] a,b,bit;
 	int index = 1;
-	int[] bit;
 	int bitIndex = 0;
 	int countIndex = 0;
-	int mask;
-	int acumVal;
 	int allCount[];
+	ArrayList<int[]> allCountBuffer;
 	static int numThreads;
-	CyclicBarrier cb;
 	final static int NUM_BIT =7; // alle tall 6-11 OK
-
+	CyclicBarrier cb;
+	
 	public static void main(String [] args) {
 		if (args.length != 2) {
 	     	System.out.println(" bruk : >java ParallellRadix <n> <n> ");
@@ -42,7 +40,6 @@ public class MultiRadixPar {
 	} // end doIt
 
 	private int[] radixMulti(int[] a2) {
-		max = a[0];
 		//Starting with a)
 		int numBit = 2, numDigits;
 		acumVal = 0;
@@ -50,88 +47,128 @@ public class MultiRadixPar {
 		cb = new CyclicBarrier(numThreads+1);
 		System.out.println("Starting threads");
 		long tt = System.nanoTime();
+		
 		for(int i=0;i<numThreads;i++){
-			new Thread(new RadixThread()).start();
+			new Thread(new RadixThread()).start();					//Creating and starting the threads
 		}
-		try{
+		try{ 														//Calls await for the threads to finish with part a)
 			cb.await();
-			while (max >= (1L<<numBit) )numBit++;
-			// bestem antall bit i numBits sifre
-			numDigits = Math.max(1, numBit/NUM_BIT);
+			while (max >= (1L<<numBit) ){								
+				numBit++;
+			}
+			numDigits = Math.max(1, numBit/NUM_BIT);				//Counts how many bits one needs to represent the number
 			bit = new int[numDigits];
 			int rest = (numBit%numDigits), sum =0;;
 			
-			// fordel bitene vi skal sortere paa jevnt
-			for (int i = 0; i < bit.length; i++){
+			for (int i = 0; i < bit.length; i++){					//Splits the bits we are sorting evenly
 				bit[i] = numBit/numDigits;
 				if ( rest-- > 0)  bit[i]++;
 			}
-			int[] t=a, b = new int [n];
-			//System.out.println("Starting Threads again - resetting index");
-			index = 0;
+																	//Declaring some new helpful variables
+			int[] t=a;
+			b = new int [n];
+			index = 0;												//Resetting index for later use
 			getBit();
 			allCount = new int[mask+1];
-			cb.await();
-			index  = 0;
-			cb.await();
 			
+			cb.await(); 											//Starting the threads again
+			index  = 0;
+			allCountBuffer = new ArrayList<int[]>(numThreads);		//Initializing allCount for counting frequency of numbers
+			cb.await();
+			setAllCount();											//Adding all the local counters into the main one
+			/*
 			cb.await();
 			 double tid = (System.nanoTime() -tt)/1000000.0;
-			System.out.println("done in "+tid);
+			System.out.println("done in "+tid);*/
 		}catch(Exception e){
 			System.err.println(e);
 		}
 		return null;
 	}
-	synchronized int getNext(){
+	
+	/*
+	 * Returns the next number in the array a[] for the threads to use
+	 * Returns -1 when the index is bigger than the size()
+	*/
+	int getNext(){
 		index++;
 		if(index<n){
 			return a[index];
 		}
 		return -1;
 	}
+	
+	/*
+	 * Sets the max value of a[]
+	 */
+	void setMax(int number){
+		if(number > max){
+			max = number;
+		}
+	}
+	/*
+	 * Remove this shit
+	 */
 	synchronized void plusAcumVal(int i) {
 		acumVal = acumVal+i;
 	}
-	boolean biggerThanMax(int i){
-		if(i>max){
-			return true;
-		}
-		return false;
+	
+	/*
+	 * Adds the arrays to a helper arrayList for later merging
+	 */
+	void addToAllCount(int count[]){
+		allCountBuffer.add(count);
 	}
-	synchronized void setMax(int i){
-		if(biggerThanMax(i)){
-			max = i;
+	
+	/*
+	 * Merges the arrays for global use 
+	 */
+	void setAllCount(){
+		for(int[] countArray: allCountBuffer){
+			for(int i=0;i<countArray.length;i++){
+				allCount[i] += countArray[i];	
+			}
 		}
 	}
-	synchronized void addToAllCount(int count[]){
-		for(int i=0;i<count.length;i++){
-			allCount[i] += count[i];
-		}
-	}
+	
+	/*
+	 * Returns the bit of the number one should now use
+	 */
 	int getBit() {
 		mask = (1<<bit[bitIndex]) -1;
 		return bit[bitIndex];
 	}
+	/*
+	 * Remove this shit
+	 */
 	synchronized int getCountIndex(){
 		if((countIndex+1)>mask){
 			return -1;
 		}
 		return countIndex++;		
 	}
+	/*
+	 * Sets the shift of the bit[] 
+	 * i.e how much one should shift to get the current number
+	 */
 	
-	//endre for lengre tall senere
 	int setShift(){
 		return 0;
 	}
+	/*
+	 * Remove this shit
+	 */
 	synchronized void setAllCountIndex(int index,int value){
 		allCount[index] = value;
 	}
 	
 	
 	class RadixThread implements Runnable{
-
+		
+		
+																	//initializing some local variables
 		int number = 0;
+		int localMax = 0;
 		int count[];
 		int value;
 		
@@ -140,26 +177,30 @@ public class MultiRadixPar {
 			//a)
 			while(number!=-1){
 				number = getNext();
-				if(biggerThanMax(number)){
-					setMax(number);
+				if(number>localMax){
+					localMax = number;
 				}
 			}
 			try{
-				cb.await();
-				cb.await();
+				setMax(localMax);									//sets the global max for later use
+				cb.await(); 										//waiting for barrier to finish
+				
 				//b)
-				number = getNext();
+				cb.await();
+				number = getNext(); 								//Starts to iterate through the numbers again
 				count = new int[mask+1];
 				int shift = setShift();
-				while(number!=-1){
+				while(number!=-1){									//Counting the frequency of numbers and adding them to local counter array
 					number = getNext();
 					if(number != -1){
 						count[(number>>> shift) & mask]++; 
 					}
 				}
-				addToAllCount(count);
+				addToAllCount(count);								//Adding local count to the main counter
 				cb.await();	
 				number = 0;
+				/*
+				 * TODO: Remove rest of synchronized methods and re-write the rest of this code:
 				//c)
 				while(number != -1){
 					number = getCountIndex();
@@ -177,7 +218,7 @@ public class MultiRadixPar {
 					if(number != -1){
 						b[allCount[(a[number]>>>shift) & mask]++] = a[number];
 					}
-				}
+				}*/
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
