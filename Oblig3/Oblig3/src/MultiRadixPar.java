@@ -139,9 +139,9 @@ public class MultiRadixPar {
 		return bit[bitIndex];
 	}
 	/*
-	 * Remove this shit
+	 * Counting the index of count[]
 	 */
-	synchronized int getCountIndex(){
+	int getCountIndex(){
 		if((countIndex+1)>mask){
 			return -1;
 		}
@@ -198,9 +198,8 @@ public class MultiRadixPar {
 				}
 				addToAllCount(count);								//Adding local count to the main counter
 				cb.await();	
-				number = 0;
-				/*
-				 * TODO: Remove rest of synchronized methods and re-write the rest of this code:
+				number = 0;											//Reset number for later use
+				
 				//c)
 				while(number != -1){
 					number = getCountIndex();
@@ -211,6 +210,8 @@ public class MultiRadixPar {
 					}
 				}
 				number = 0;
+				/*
+				 * TODO: Remove rest of synchronized methods and re-write the rest of this code:
 				cb.await();
 				//d)
 				while(number != -1){
